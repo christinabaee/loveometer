@@ -1,0 +1,56 @@
+/*
+#include <Servo.h>
+Servo myservo;
+int val;
+
+void setup() {
+  // put your setup code here, to run once:
+  myservo.attach(9);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  val=analogRead(1);
+  val=map(val,0,1230,0,180);
+  Serial.println(val);
+  myservo.write(val);
+  delay(15);
+}
+*/
+
+#include <Servo.h>
+
+Servo myservo;  // create servo object to control a servo
+
+int potpin = A1;  // analog pin used to connect the potentiometer
+int val;    // variable to read the value from the analog pin
+int redLED = 4; // variable for LED when low 
+int greenLED = 3;
+
+void setup() {
+  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop() {
+  val = analogRead(potpin);            // reads the value of the potentiometer (value between 0 and 1023)
+  val = map(val, 0, 1023, 0, 180); // scale it for use with the servo (value between 0 and 180)
+
+  if (val <= 30)
+    digitalWrite(redLED, HIGH);
+    digitalWrite(greenLED, LOW);
+  if (val >= 170)
+    digitalWrite(greenLED, HIGH);
+    digitalWrite(redLED, LOW);
+
+  myservo.write(val); // sets the servo position according to the scaled value
+  Serial.println(val);   
+
+  // if (val > 30)
+  //   digitalWrite(redLED, LOW);
+  // if (val < 150)
+  //   digitalWrite(greenLED, LOW);
+  delay(10);                         // waits for the servo to get there
+}
